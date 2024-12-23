@@ -1,29 +1,118 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Category List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (Bootstrap requires jQuery) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Admin Dashboard</title>
 </head>
 <body>
-<h1>Category List</h1>
-<a href="/admin/categories/add">Add New Category</a>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="category : ${categories}">
-        <td th:text="${category.category_id}"></td>
-        <td th:text="${category.name}"></td>
-        <td>
-            <a th:href="@{/admin/categories/edit/{id}(id=${category.category_id})}">Edit</a>
-            <a th:href="@{/admin/categories/delete/{id}(id=${category.category_id})}">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="/admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
+        <div class="container-fluid">
+            <div class="d-flex p-3 justify-content-between align-items-center">
+                <h1>Danh mục phim</h1>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">Thêm mới +</a>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tên</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category, status : ${categories}">
+                    <td th:text="${status.index + 1}"></td>
+                    <td th:text="${category.name}"></td>
+                    <td style="gap: 10px">
+                        <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editCategoryModal"
+                           th:data-id="${category.category_id}" th:data-name="${category.name}">Sửa</a>
+                        <a class="btn btn-danger" th:href="@{/admin/categories/delete/{id}(id=${category.category_id})}">Xóa</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">+</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/admin/categories/add}" th:object="${category}" method="post">
+                    <div class="form-group">
+                        <label for="name">Tên danh mục:</label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa danh mục</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/admin/categories/edit}" method="post">
+                    <input type="hidden" id="editCategoryId" name="category_id"/>
+                    <div class="form-group">
+                        <label for="editName">Tên danh mục:</label>
+                        <input type="text" class="form-control" id="editName" name="name"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editCategoryModal = document.getElementById('editCategoryModal');
+
+        editCategoryModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var id = button.getAttribute('data-id'); // Extract info from data-* attributes
+            var name = button.getAttribute('data-name');
+
+            // Update the modal's content.
+            var modal = this;
+            modal.querySelector('#editCategoryId').value = id;
+            modal.querySelector('#editName').value = name;
+
+            // Prevent form submission from adding a new category
+            modal.querySelector('form').setAttribute('action', '/admin/categories/edit/' + id);
+        });
+    });
+</script>
+
 </body>
+
 </html>

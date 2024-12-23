@@ -17,14 +17,27 @@ import lombok.*;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
-    private String name;
+    public Long category_id;
+    public String name;
 
-    // Getters and Setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory_id(Long category_id) {
+        this.category_id = category_id;
+    }
+
+    public Long getCategory_id() {
+        return category_id;
+    }
 }

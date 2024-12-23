@@ -6,9 +6,9 @@
 
 package com.example.demo.services.Impls;
 
-import com.example.demo.models.MovieCategory;
+import com.example.demo.models.Category;
 import com.example.demo.repositories.CategoryRepository;
-import com.example.demo.services.MovieCategoryService;
+import com.example.demo.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,29 +20,30 @@ import java.util.List;
  * @date : 12/23/2024
  * @version 1.0
  */
+
 @Service
-public class CategoryServiceImpl implements MovieCategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Override
-    public List<MovieCategory> getAllMovieCategory() {
-        return categoryRepository.findAll();
+    public List<Category> getAllCategory() {
+        return categoryRepository.findAll(); // Trả về danh sách Category
     }
 
     @Override
-    public MovieCategory getMovieCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElse(null); // Tìm kiếm Category theo ID
     }
 
     @Override
-    public MovieCategory saveMovieCategory(MovieCategory category) {
-        return categoryRepository.save(category);
+    public Category saveCategory(Category category) {
+        return categoryRepository.save(category); // Lưu Category
     }
 
     @Override
     public void deleteMovieCategoryById(Long id) {
-        MovieCategory movieCategory = getMovieCategoryById(id);
-        categoryRepository.delete(movieCategory);
+        categoryRepository.deleteById(id); // Xóa Category theo ID
     }
 }

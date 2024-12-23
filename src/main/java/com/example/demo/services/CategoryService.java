@@ -5,8 +5,7 @@
  */
 package com.example.demo.services;
 
-import com.example.demo.models.MovieCategory;
-
+import com.example.demo.models.Category;
 import java.util.List;
 
 /*
@@ -15,9 +14,9 @@ import java.util.List;
  * @date : 12/23/2024
  * @version 1.0
  */
-public interface MovieCategoryService {
-    List<MovieCategory> getAllMovieCategory();
-    MovieCategory getMovieCategoryById(Long id);
-    MovieCategory saveMovieCategory(MovieCategory category);
+public interface CategoryService {
+    List<Category> getAllCategory();
+    Category getCategoryById(Long id);
+    Category saveCategory(Category category);
     void deleteMovieCategoryById(Long id);
 }

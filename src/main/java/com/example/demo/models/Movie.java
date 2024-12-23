@@ -30,6 +30,7 @@ public class Movie {
     private String description;
     private LocalDate release_date;
     private String genre;
+    private String link;
 
     @ManyToOne
     @JoinColumn(name = "country_id")

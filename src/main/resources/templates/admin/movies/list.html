@@ -32,13 +32,13 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped ">
                     <thead>
                     <tr>
                         <th>#</th>
                         <th>Tiêu đề</th>
                         <th>Mô tả</th>
-                        <th style="width: 400px">Ngày phát hành</th>
+                        <th>Ngày phát hành</th>
                         <th>Thể loại</th>
                         <th>Phim</th>
                         <th>Thumbnail</th>
@@ -50,7 +50,7 @@
                         <td th:text="${status.index + 1}"></td>
                         <td class="text-wrap" style="max-width: 150px;" th:text="${movie.title}"></td>
                         <td class="text-wrap" style="max-width: 200px;" th:text="${movie.description}"></td>
-                        <td th:text="${movie.release_date}"  ></td>
+                        <td class="text-wrap"  th:text="${movie.release_date}"></td>
                         <td>
                             <ul class="list-unstyled">
                                 <li th:each="type : ${movie.movieTypes}">

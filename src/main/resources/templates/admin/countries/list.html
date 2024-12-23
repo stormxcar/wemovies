@@ -12,8 +12,8 @@
     <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
         <div class="container-fluid">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                <h1>Danh mục phim</h1>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">Thêm mới +</button>
+                <h1>Quốc gia</h1>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addcountryModal">Thêm mới +</button>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -24,13 +24,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="category, status : ${categories}">
+                <tr th:each="country, status : ${countries}">
                     <td th:text="${status.index + 1}"></td>
-                    <td th:text="${category.name}"></td>
+                    <td th:text="${country.name}"></td>
                     <td>
-                        <button class="btn btn-warning edit-category" data-toggle="modal" data-target="#editCategoryModal"
-                                th:data-id="${category.category_id}" th:data-name="${category.name}">Sửa</button>
-                        <a class="btn btn-danger" th:href="@{/admin/categories/delete/{id}(id=${category.category_id})}">Xóa</a>
+                        <button class="btn btn-warning edit-country" data-toggle="modal" data-target="#editcountryModal"
+                                th:data-id="${country.country_id}" th:data-name="${country.name}">Sửa</button>
+                        <a class="btn btn-danger" th:href="@{/admin/countries/delete/{id}(id=${country.country_id})}">Xóa</a>
                     </td>
                 </tr>
                 </tbody>
@@ -39,18 +39,18 @@
     </div>
 </div>
 
-<!-- Add Category Modal -->
-<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog">
+<!-- Add country Modal -->
+<div class="modal fade" id="addcountryModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm danh mục mới</h5>
+                <h5 class="modal-title">Thêm quốc gia mới</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/admin/categories/add}" th:object="${category}" method="post">
+                <form th:action="@{/admin/countries/add}" th:object="${country}" method="post">
                     <div class="form-group">
-                        <label for="name">Tên danh mục:</label>
+                        <label for="name">Tên quốc gia:</label>
                         <input type="text" class="form-control" id="name" th:field="*{name}" required />
                     </div>
                     <button type="submit" class="btn btn-primary">Thêm</button>
@@ -60,19 +60,19 @@
     </div>
 </div>
 
-<!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog">
+<!-- Edit country Modal -->
+<div class="modal fade" id="editcountryModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Sửa danh mục</h5>
+                <h5 class="modal-title">Sửa quốc gia</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/admin/categories/edit}" method="post">
-                    <input type="hidden" id="editCategoryId" name="category_id"/>
+                <form th:action="@{/admin/countries/edit}" method="post">
+                    <input type="hidden" id="editcountryId" name="country_id"/>
                     <div class="form-group">
-                        <label for="editName">Tên danh mục:</label>
+                        <label for="editName">Tên quốc gia:</label>
                         <input type="text" class="form-control" id="editName" name="name" required/>
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
@@ -84,9 +84,9 @@
 
 <script>
     $(function() {
-        $('#editCategoryModal').on('show.bs.modal', function (event) {
+        $('#editcountryModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            $(this).find('#editCategoryId').val(button.data('id'));
+            $(this).find('#editcountryId').val(button.data('id'));
             $(this).find('#editName').val(button.data('name'));
         });
     });

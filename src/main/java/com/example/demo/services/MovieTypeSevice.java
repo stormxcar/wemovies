@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface MovieTypeSevice {
     List<MovieType> getAllMovieTypes();
-    MovieType getMovieTypeById(int id);
+    MovieType getMovieTypeById(Long id);
     MovieType saveMovieType(MovieType movieType);
-    void deleteMovieTypeById(int id);
+    void deleteMovieTypeById(Long id);
 }

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- jQuery (Bootstrap requires jQuery) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <title>Admin Dashboard - Movies</title>
+</head>
+<body>
+<div id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{/admin/fragments/sidebar :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
+        <div class="">
+            <div class="d-flex p-3 justify-content-between align-items-center">
+                <h1>Danh sách phim</h1>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal">Thêm mới +</a>
+            </div>
+
+            <div>
+                <h4>Tổng số phim: <span th:text="${countMovie}"></span></h4>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tiêu đề</th>
+                        <th>Mô tả</th>
+                        <th>Ngày phát hành</th>
+                        <th>Thể loại</th>
+                        <th>Phim</th>
+                        <th>Ảnh bìa</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="movie, status : ${movies}">
+                        <td th:text="${status.index + 1}"></td>
+                        <td style="display: block;width: 160px;" th:text="${movie.title}"></td>
+                        <td class="text-wrap" style="max-width: 160px;" th:text="${movie.description}"></td>
+                        <td style="display: block;width: 140px;" th:text="${movie.release_date}"></td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li th:each="type : ${movie.movieTypes}">
+                                    <span style="width: 75px;margin: 2px" class="btn btn-info btn-sm" th:text="${type.type_name}"></span>
+                                </li>
+                            </ul>
+                        </td>
+                        <td style="display: block;width: 160px;word-wrap: anywhere" th:text="${movie.link}"></td>
+                        <td><img th:src="${movie.thumb_url}" alt="Thumbnail" style="max-width: 100px;"/></td>
+                        <td style="gap: 10px;">
+                            <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editMovieModal"
+                               th:data-id="${movie.movie_id}" th:data-title="${movie.title}" th:data-description="${movie.description}"
+                               th:data-release-date="${movie.release_date}" th:data-thumb-url="${movie.thumb_url}"
+                               th:data-link="${movie.link}" th:data-movie-types="${movie.movieTypes}"
+                               style="width: 120px;margin: 2px">Sửa</a>
+                            <a style="width: 120px;margin: 2px;display: block" class="btn btn-danger" th:href="@{/admin/movies/delete/{id}(id=${movie.movie_id})}">Xóa</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Movie Modal -->
+<div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm mới phim</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/admin/movies/add}" th:object="${movie}" method="post">
+                    <div class="form-group">
+                        <label for="title">Tiêu đề:</label>
+                        <input type="text" class="form-control" id="title" th:field="*{title}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Mô tả:</label>
+                        <textarea class="form-control" id="description" th:field="*{description}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="release_date">Ngày phát hành:</label>
+                        <input type="date" class="form-control" id="release_date" th:field="*{release_date}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="movieTypes">Thể loại:</label>
+                        <select class="form-control" id="movieTypes" name="types" multiple>
+                            <option th:each="type : ${types}" th:value="${type.movie_type_id}" th:text="${type.type_name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Danh mục:</label>
+                        <select class="form-control" id="category" name="category">
+                            <option th:each="category : ${categories}" th:value="${category.category_id}" th:text="${category.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="thumb_url">Thumbnail URL:</label>
+                        <input type="file" class="form-control" id="thumb_url" th:field="*{thumb_url}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="link_url">Link:</label>
+                        <input type="text" class="form-control" id="link_url" th:field="*{link}" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Movie Modal -->
+<div class="modal fade" id="editMovieModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa phim</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/admin/movies/edit}" method="post">
+                    <input type="hidden" id="editMovieId" name="movie_id"/>
+                    <div class="form-group">
+                        <label for="editTitle">Tiêu đề:</label>
+                        <input type="text" class="form-control" id="editTitle" name="title"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Mô tả:</label>
+                        <textarea class="form-control" id="editDescription" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editReleaseDate">Ngày phát hành:</label>
+                        <input type="date" class="form-control" id="editReleaseDate" name="release_date"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="editThumbUrl">Thumbnail URL:</label>
+                        <input type="text" class="form-control" id="editThumbUrl" name="thumb_url"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMovieTypes">Thể loại:</label>
+                        <select class="form-control" id="editMovieTypes" name="movieTypes" multiple>
+                            <option th:each="type : ${types}" th:value="${type.movie_type_id}" th:text="${type.type_name}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        // Initialize Select2 for adding movie
+        $('#movieTypes').select2({
+            placeholder: 'Chọn thể loại',
+            allowClear: true
+        });
+
+        // Initialize Select2 for editing movie
+        $('#editMovieTypes').select2({
+            placeholder: 'Chọn thể loại',
+            allowClear: true
+        });
+
+        // Function to populate the edit movie modal with the correct data
+        $('#editMovieModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var id = button.data('id'); // Extract info from data-* attributes
+            var title = button.data('title');
+            var description = button.data('description');
+            var releaseDate = button.data('release-date');
+            var thumbUrl = button.data('thumb-url');
+            var movieTypes = button.data('movie-types'); // Array of movie types
+
+            // Update the modal's content.
+            var modal = $(this);
+            modal.find('#editMovieId').val(id);
+            modal.find('#editTitle').val(title);
+            modal.find('#editDescription').val(description);
+            modal.find('#editReleaseDate').val(releaseDate);
+            modal.find('#editThumbUrl').val(thumbUrl);
+
+            // Clear current selected options and set new ones
+            modal.find('#editMovieTypes').val(null).trigger('change');
+            movieTypes.forEach(function(type) {
+                modal.find('#editMovieTypes').append(new Option(type.type_name, type.movie_type_id, true, true)).trigger('change');
+            });
+        });
+    });
+</script>
+</body>
+</html>

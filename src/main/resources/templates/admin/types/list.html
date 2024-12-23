@@ -12,8 +12,8 @@
     <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
         <div class="container-fluid">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                <h1>Danh mục phim</h1>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">Thêm mới +</button>
+                <h1>Thể loại</h1>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addtypeModal">Thêm mới +</button>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -24,13 +24,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="category, status : ${categories}">
+                <tr th:each="type, status : ${types}">
                     <td th:text="${status.index + 1}"></td>
-                    <td th:text="${category.name}"></td>
+                    <td th:text="${type.type_name}"></td>
                     <td>
-                        <button class="btn btn-warning edit-category" data-toggle="modal" data-target="#editCategoryModal"
-                                th:data-id="${category.category_id}" th:data-name="${category.name}">Sửa</button>
-                        <a class="btn btn-danger" th:href="@{/admin/categories/delete/{id}(id=${category.category_id})}">Xóa</a>
+                        <button class="btn btn-warning edit-type" data-toggle="modal" data-target="#edittypeModal"
+                                th:data-id="${type.movie_type_id}" th:data-name="${type.type_name}">Sửa</button>
+                        <a class="btn btn-danger" th:href="@{/admin/types/delete/{id}(id=${type.movie_type_id})}">Xóa</a>
                     </td>
                 </tr>
                 </tbody>
@@ -39,19 +39,19 @@
     </div>
 </div>
 
-<!-- Add Category Modal -->
-<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog">
+<!-- Add type Modal -->
+<div class="modal fade" id="addtypeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm danh mục mới</h5>
+                <h5 class="modal-title">Thêm thể loại mới</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/admin/categories/add}" th:object="${category}" method="post">
+                <form th:action="@{/admin/types/add}" th:object="${type}" method="post">
                     <div class="form-group">
-                        <label for="name">Tên danh mục:</label>
-                        <input type="text" class="form-control" id="name" th:field="*{name}" required />
+                        <label for="name">Tên thể loại:</label>
+                        <input type="text" class="form-control" id="name" th:field="*{type_name}" required />
                     </div>
                     <button type="submit" class="btn btn-primary">Thêm</button>
                 </form>
@@ -60,20 +60,20 @@
     </div>
 </div>
 
-<!-- Edit Category Modal -->
-<div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog">
+<!-- Edit type Modal -->
+<div class="modal fade" id="edittypeModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Sửa danh mục</h5>
+                <h5 class="modal-title">Sửa thể loại</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/admin/categories/edit}" method="post">
-                    <input type="hidden" id="editCategoryId" name="category_id"/>
+                <form th:action="@{/admin/types/edit}" method="post">
+                    <input type="hidden" id="edittypeId" name="movie_type_id"/>
                     <div class="form-group">
                         <label for="editName">Tên danh mục:</label>
-                        <input type="text" class="form-control" id="editName" name="name" required/>
+                        <input type="text" class="form-control" id="editName" name="type_name" required/>
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                 </form>
@@ -84,9 +84,9 @@
 
 <script>
     $(function() {
-        $('#editCategoryModal').on('show.bs.modal', function (event) {
+        $('#edittypeModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
-            $(this).find('#editCategoryId').val(button.data('id'));
+            $(this).find('#edittypeId').val(button.data('id'));
             $(this).find('#editName').val(button.data('name'));
         });
     });

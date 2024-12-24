@@ -22,13 +22,11 @@
     <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
         <div class="">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                <h1>Danh sách phim</h1>
+                    <h4>Tổng số phim : <span th:text="${countMovie}"></span></h4>
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal">Thêm mới +</a>
             </div>
 
-            <div>
-                <h4>Tổng số phim: <span th:text="${countMovie}"></span></h4>
-            </div>
+
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -38,7 +36,7 @@
                         <th>Ảnh bìa</th>
                         <th>Tiêu đề</th>
                         <th>Mô tả</th>
-                        <th>Ngày phát hành</th>
+                        <th>Năm phát hành</th>
                         <th>Thể loại</th>
                         <th>Danh mục</th>
                         <th>Quốc gia</th>
@@ -52,8 +50,11 @@
                         <td th:text="${status.index + 1}"></td>
                         <td><img th:src="@{/thumb/{thumb_url}(thumb_url=${movie.thumb_url})}" alt="Thumbnail" style="max-width: 100px;"/></td>
                         <td style="display: block;width: 100px;" th:text="${movie.title}"></td>
-                        <td class="text-wrap" style="max-width: 160px;" th:text="${movie.description}"></td>
-                        <td style="display: block;width: 200px;" th:text="${movie.release_date}"></td>
+                        <td class="description">
+                            <span th:text="${#strings.abbreviate(movie.description, 50)}" data-toggle="tooltip" title="${movie.description}"></span>
+                        </td>
+
+                        <td style="display: block;width: 150px;" th:text="${movie.release_date}" class="text-center"></td>
                         <td>
                             <ul class="list-unstyled">
                                 <li th:each="type : ${movie.movieTypes}">
@@ -79,7 +80,7 @@
                                th:data-release-date="${movie.release_date}" th:data-thumb-url="${movie.thumb_url}"
                                th:data-link="${movie.link}" th:data-movie-types="${movie.movieTypes}"
                                style="width: 120px;margin: 2px">Sửa</a>
-                            <a style="width: 120px;margin: 2px;display: block" class="btn btn-danger" th:href="@{/admin/movies/delete/{id}(id=${movie.movie_id})}">Xóa</a>
+<!--                            <a style="width: 120px;margin: 2px;display: block" class="btn btn-danger" th:href="@{/admin/movies/delete/{id}(id=${movie.movie_id})}">Xóa</a>-->
                         </td>
                     </tr>
                     </tbody>
@@ -110,18 +111,18 @@
                         <textarea class="form-control" id="description" th:field="*{description}" maxlength="65535"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="release_date">Ngày phát hành:</label>
+                        <label for="release_date">Năm phát hành:</label>
                         <input type="number" value="2000" class="form-control" id="release_date" min="1900" max="2100" th:field="*{release_date}" />
                     </div>
                     <div class="form-group">
-                        <label for="movieTypes">Thể loại:</label>
-                        <select class="form-control" id="movieTypes" name="movieTypeIds" multiple>
+                        <label for="movieTypes" class="d-block">Thể loại:</label>
+                        <select class="form-control" style="width: 100%" id="movieTypes" name="movieTypeIds" multiple>
                             <option th:each="type : ${types}" th:value="${type.movie_type_id}" th:text="${type.type_name}"></option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="category">Danh mục:</label>
-                        <select class="form-control" id="category" name="categoryIds" multiple>
+                        <label for="category" class="d-block">Danh mục:</label>
+                        <select class="form-control " style="width: 100%" id="category" name="categoryIds" multiple>
                             <option th:each="category : ${categories}" th:value="${category.category_id}" th:text="${category.name}"></option>
                         </select>
                     </div>
@@ -200,6 +201,17 @@
             placeholder: 'Chọn thể loại',
             allowClear: true
         });
+        // Initialize Select2 for adding movie
+        $('#category').select2({
+            placeholder: 'Chọn danh mục',
+            allowClear: true
+        });
+
+        // // Initialize Select2 for editing movie
+        // $('#editcategory').select2({
+        //     placeholder: 'Chọn thể loại',
+        //     allowClear: true
+        // });
 
         // Function to populate the edit movie modal with the correct data
         $('#editMovieModal').on('show.bs.modal', function (event) {

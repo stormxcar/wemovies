@@ -45,6 +45,14 @@ public class Movie {
     )
     private Set<MovieType> movieTypes;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "movie_category",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> movieCategories;
+
 
     public Long getMovie_id() {
         return movie_id;

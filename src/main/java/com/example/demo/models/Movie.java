@@ -16,6 +16,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,8 +30,9 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movie_id;
     private String title;
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
-    private LocalDate release_date;
+    private Year release_year;
     private String link;
     private String thumb_url;
 
@@ -43,7 +46,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_type_id")
     )
-    private Set<MovieType> movieTypes;
+    private Set<MovieType> movieTypes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -51,7 +54,7 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> movieCategories;
+    private Set<Category> movieCategories = new HashSet<>();
 
 
     public Long getMovie_id() {
@@ -78,12 +81,12 @@ public class Movie {
         this.description = description;
     }
 
-    public LocalDate getRelease_date() {
-        return release_date;
+    public Year getRelease_date() {
+        return release_year;
     }
 
-    public void setRelease_date(LocalDate release_date) {
-        this.release_date = release_date;
+    public void setRelease_date(Year release_date) {
+        this.release_year = release_date;
     }
 
     public String getLink() {
@@ -116,5 +119,13 @@ public class Movie {
 
     public void setMovieTypes(Set<MovieType> movieTypes) {
         this.movieTypes = movieTypes;
+    }
+
+    public Set<Category> getMovieCategories() {
+        return movieCategories;
+    }
+
+    public void setMovieCategories(Set<Category> movieCategories) {
+        this.movieCategories = movieCategories;
     }
 }

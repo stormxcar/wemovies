@@ -7,15 +7,21 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Category;
+import com.example.demo.models.Country;
 import com.example.demo.models.Movie;
+import com.example.demo.models.MovieType;
 import com.example.demo.services.CategoryService;
+import com.example.demo.services.CountryService;
 import com.example.demo.services.MovieService;
 import com.example.demo.services.MovieTypeSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /*
  * @description
@@ -35,6 +41,9 @@ public class MovieController {
     @Autowired
     private MovieTypeSevice movieTypeSevice;
 
+    @Autowired
+    private CountryService countryService;
+
     @GetMapping
     public String listMovie(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
@@ -42,6 +51,37 @@ public class MovieController {
         model.addAttribute("countMovie", movieService.countMovies());
         model.addAttribute("categories", categoryService.getAllCategory());
         model.addAttribute("types", movieTypeSevice.getAllMovieTypes());
+        model.addAttribute("countries", countryService.getAllCountries());
         return "admin/movies/list";
+    }
+
+    @PostMapping("/add")
+    public String addMovie(@ModelAttribute("movie") Movie movie,
+                           @RequestParam("countryId") Long countryId,
+                           @RequestParam("movieTypeIds") List<Long> movieTypeIds,
+                           @RequestParam("categoryIds") List<Long> categoryIds) {
+        // Lấy quốc gia theo ID
+        Country country = countryService.getCountryById(countryId);
+        movie.setCountry(country);
+
+        // Lấy các thể loại theo ID
+        Set<MovieType> movieTypes = new HashSet<>();
+        for (Long id : movieTypeIds) {
+            MovieType movieType = movieTypeSevice.getMovieTypeById(id);
+            movieTypes.add(movieType);
+        }
+        movie.setMovieTypes(movieTypes);
+
+        // Lấy các danh mục theo ID
+        Set<Category> categories = new HashSet<>();
+        for (Long id : categoryIds) {
+            Category category = categoryService.getCategoryById(id);
+            categories.add(category);
+        }
+        movie.setMovieCategories(categories);
+
+        // Lưu bộ phim
+        movieService.saveMovie(movie);
+        return "redirect:/admin/movies";
     }
 }

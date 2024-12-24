@@ -35,13 +35,9 @@ public class AdminController {
         Admin admin = adminService.findByUserName(username);
         if (admin != null && admin.getPassword().equals(password))
         {
-            return "redirect:/admin/dashboard";
+            return "redirect:/admin/categories";
         }
         model.addAttribute("error", "Invalid username or password");
         return "admin/login";
-    }
-    @GetMapping("/admin/dashboard")
-    public String showDashboard() {
-        return "admin/dashboard";
     }
 }

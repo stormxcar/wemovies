@@ -22,11 +22,9 @@
     <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
         <div class="">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                    <h4>Tổng số phim : <span th:text="${countMovie}"></span></h4>
+                <h4>Tổng số phim : <span th:text="${countMovie}"></span></h4>
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal">Thêm mới +</a>
             </div>
-
-
 
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -41,7 +39,6 @@
                         <th>Danh mục</th>
                         <th>Quốc gia</th>
                         <th>Phim</th>
-
                         <th>Hành động</th>
                     </tr>
                     </thead>
@@ -53,8 +50,7 @@
                         <td class="description">
                             <span th:text="${#strings.abbreviate(movie.description, 50)}" data-toggle="tooltip" title="${movie.description}"></span>
                         </td>
-
-                        <td style="display: block;width: 150px;" th:text="${movie.release_date}" class="text-center"></td>
+                        <td style="display: block;width: 150px;" th:text="${movie.release_year}" class="text-center"></td>
                         <td>
                             <ul class="list-unstyled">
                                 <li th:each="type : ${movie.movieTypes}">
@@ -71,16 +67,11 @@
                         </td>
                         <td style="width: 140px;" th:text="${movie.country.name}"></td>
                         <td style="display: block;width: 160px;word-wrap: anywhere" th:text="${movie.link}"></td>
-
-
-
                         <td style="gap: 10px;">
-                            <a class="btn btn-warning" href="#" data-toggle="modal" data-target="#editMovieModal"
-                               th:data-id="${movie.movie_id}" th:data-title="${movie.title}" th:data-description="${movie.description}"
-                               th:data-release-date="${movie.release_date}" th:data-thumb-url="${movie.thumb_url}"
-                               th:data-link="${movie.link}" th:data-movie-types="${movie.movieTypes}"
-                               style="width: 120px;margin: 2px">Sửa</a>
-<!--                            <a style="width: 120px;margin: 2px;display: block" class="btn btn-danger" th:href="@{/admin/movies/delete/{id}(id=${movie.movie_id})}">Xóa</a>-->
+                            <!-- Nút Sửa -->
+                            <a class="btn btn-warning" href="#"
+                               th:onclick="'openEditModal(' + ${movie.movie_id} + ')' "
+                               style="width: 120px; margin: 2px;">Sửa</a>
                         </td>
                     </tr>
                     </tbody>
@@ -91,7 +82,7 @@
 </div>
 
 <!-- Add Movie Modal -->
-<div class="modal fade" id="addMovieModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="addMovieModal" tabindex="-1" role=" dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -111,8 +102,8 @@
                         <textarea class="form-control" id="description" th:field="*{description}" maxlength="65535"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="release_date">Năm phát hành:</label>
-                        <input type="number" value="2000" class="form-control" id="release_date" min="1900" max="2100" th:field="*{release_date}" />
+                        <label for="release_year">Năm phát hành:</label>
+                        <input type="number" value="2000" class="form-control" id="release_year" min="1900" max="2100" th:field="*{release_year}" />
                     </div>
                     <div class="form-group">
                         <label for="movieTypes" class="d-block">Thể loại:</label>
@@ -147,42 +138,57 @@
     </div>
 </div>
 
-<!-- Edit Movie Modal -->
-<div class="modal fade" id="editMovieModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<!-- Modal Chỉnh Sửa Phim -->
+<div class="modal fade" id="editMovieModal" tabindex="-1" aria-labelledby="editMovieModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Sửa phim</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="editMovieModalLabel">Edit Movie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/admin/movies/edit}" method="post">
-                    <input type="hidden" id="editMovieId" name="movie_id"/>
-                    <div class="form-group">
-                        <label for="editTitle">Tiêu đề:</label>
-                        <input type="text" class="form-control" id="editTitle" name="title"/>
+                <form id="editMovieForm">
+                    <div class="mb-3">
+                        <label for="movieTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="movieTitle" name="title" required>
                     </div>
-                    <div class="form-group">
-                        <label for="editDescription">Mô tả:</label>
-                        <textarea class="form-control" id="editDescription" name="description"></textarea>
+                    <div class="mb-3">
+                        <label for="movieDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="movieDescription" name="description" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="editReleaseDate">Ngày phát hành:</label>
-                        <input type="date" class="form-control" id="editReleaseDate" name="release_date"/>
+                    <div class="mb-3">
+                        <label for="releaseYear" class="form-label">Release Year</label>
+                        <input type="text" class="form-control" id="releaseYear" name="release_year" required>
                     </div>
-                    <div class="form-group">
-                        <label for="editThumbUrl">Ảnh bìa:</label>
-                        <input type="text" class="form-control" id="editThumbUrl" name="thumb_url"/>
+                    <div class="mb-3">
+                        <label for="movieLink" class="form-label"> Link</label>
+                        <input type="url" class="form-control" id="movieLink" name="link" required>
                     </div>
-                    <div class="form-group">
-                        <label for="editMovieTypes">Thể loại:</label>
-                        <select class="form-control" id="editMovieTypes" name="movieTypes" multiple>
-                            <option th:each="type : ${types}" th:value="${type.movie_type_id}" th:text="${type.type_name}"></option>
+                    <div class="mb-3">
+                        <label for="thumbUrl" class="form-label">Thumbnail URL</label>
+                        <input type="text" class="form-control" id="thumbUrl" name="thumb_url" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCountry" class="form-label">Country</label>
+                        <select class="form-select" id="editCountry" name="countryId" required>
+                            <option value="" disabled selected>Select Country</option>
+                            <!-- Options will be populated dynamically -->
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    <div class="mb-3">
+                        <label for="editMovieTypes" class="form-label">Movie Types</label>
+                        <select class="form-select" id="editMovieTypes" name="movieTypeIds" multiple required>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editMovieCategories" class="form-label">Movie Categories</label>
+                        <select class="form-select" id="editMovieCategories" name="categoryIds" multiple required>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <input type="hidden" id="movieId" name="id">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>
@@ -190,52 +196,92 @@
 </div>
 <script>
     $(document).ready(function() {
-        // Initialize Select2 for adding movie
+        // Initialize Select2 for editing movie
         $('#movieTypes').select2({
             placeholder: 'Chọn thể loại',
             allowClear: true
         });
 
-        // Initialize Select2 for editing movie
-        $('#editMovieTypes').select2({
-            placeholder: 'Chọn thể loại',
-            allowClear: true
-        });
-        // Initialize Select2 for adding movie
-        $('#category').select2({
+        $('#movieCategories').select2({
             placeholder: 'Chọn danh mục',
             allowClear: true
         });
 
-        // // Initialize Select2 for editing movie
-        // $('#editcategory').select2({
-        //     placeholder: 'Chọn thể loại',
-        //     allowClear: true
-        // });
+        // Open modal and load movie data
+        window.openEditModal = function(movieId) {
+            fetch(`/api/movies/${movieId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update fields in modal
+                    document.getElementById('movieTitle').value = data.title;
+                    document.getElementById('movieDescription').value = data.description;
+                    document.getElementById('releaseYear').value = data.release_year;
+                    document.getElementById('movieLink').value = data.link;
+                    document.getElementById('thumbUrl').value = data.thumb_url;
+                    document.getElementById('movieId').value = data.movie_id;
 
-        // Function to populate the edit movie modal with the correct data
-        $('#editMovieModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var id = button.data('id'); // Extract info from data-* attributes
-            var title = button.data('title');
-            var description = button.data('description');
-            var releaseDate = button.data('release-date');
-            var thumbUrl = button.data('thumb-url');
-            var movieTypes = button.data('movie-types'); // Array of movie types
+                    // Update country
+                    const countrySelect = document.getElementById('editCountry');
+                    countrySelect.innerHTML = ''; // Clear current options
+                    const countryOption = document.createElement('option');
+                    countryOption.value = data.country.country_id;
+                    countryOption.textContent = data.country.name;
+                    countrySelect.appendChild(countryOption);
 
-            // Update the modal's content.
-            var modal = $(this);
-            modal.find('#editMovieId').val(id);
-            modal.find('#editTitle').val(title);
-            modal.find('#editDescription').val(description);
-            modal.find('#editReleaseDate').val(releaseDate);
-            modal.find('#editThumbUrl').val(thumbUrl);
+                    // Update movie types
+                    const movieTypesSelect = document.getElementById('editMovieTypes');
+                    movieTypesSelect.innerHTML = ''; // Clear current options
+                    data.movieTypes.forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type.movie_type_id;
+                        option.textContent = type.type_name;
+                        movieTypesSelect.appendChild(option);
+                    });
 
-            // Clear current selected options and set new ones
-            modal.find('#editMovieTypes').val(null).trigger('change');
-            movieTypes.forEach(function(type) {
-                modal.find('#editMovieTypes').append(new Option(type.type_name, type.movie_type_id, true, true)).trigger('change');
-            });
+                    // Update movie categories
+                    const movieCategoriesSelect = document.getElementById('editMovieCategories');
+                    movieCategoriesSelect.innerHTML = ''; // Clear current options
+                    data.movieCategories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.category_id;
+                        option.textContent = category.name;
+                        movieCategoriesSelect.appendChild(option);
+                    });
+
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('editMovieModal'));
+                    modal.show();
+                })
+                .catch(error => console.error('Error fetching movie data:', error));
+        };
+
+        // Handle form submission
+        document.getElementById('editMovieForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const movieId = document.getElementById('movieId').value;
+
+            fetch(`/api/movies/${movieId}`, {
+                method: 'PUT', // Use PUT to update data
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Close modal and refresh movie list or update UI
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editMovie Modal'));
+                        modal.hide();
+                        // You can add code here to refresh the movie list
+                    } else {
+                        console.error('Error updating movie:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

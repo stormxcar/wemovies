@@ -6,15 +6,13 @@
 
 package com.example.demo.controllers;
 
-import com.example.demo.models.Category;
-import com.example.demo.models.Country;
-import com.example.demo.models.Movie;
-import com.example.demo.models.MovieType;
+import com.example.demo.models.*;
 import com.example.demo.services.CategoryService;
 import com.example.demo.services.CountryService;
 import com.example.demo.services.MovieService;
 import com.example.demo.services.MovieTypeSevice;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,5 +81,13 @@ public class MovieController {
         // Lưu bộ phim
         movieService.saveMovie(movie);
         return "redirect:/admin/movies";
+    }
+
+    @GetMapping("/admin/api/{id}")
+    @ResponseBody
+    public ResponseEntity<MovieDto> editMovie(@PathVariable Long id) {
+        Movie movie = movieService.getMovieById(id);
+        MovieDto movieDto = new MovieDto(movie);
+        return ResponseEntity.ok(movieDto);
     }
 }

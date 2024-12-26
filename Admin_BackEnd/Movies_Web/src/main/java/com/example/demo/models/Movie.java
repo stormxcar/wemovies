@@ -15,7 +15,6 @@ package com.example.demo.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,12 +80,12 @@ public class Movie {
         this.description = description;
     }
 
-    public Year getRelease_date() {
+    public Year getRelease_year() {
         return release_year;
     }
 
-    public void setRelease_date(Year release_date) {
-        this.release_year = release_date;
+    public void setRelease_year(Year release_year) {
+        this.release_year = release_year;
     }
 
     public String getLink() {

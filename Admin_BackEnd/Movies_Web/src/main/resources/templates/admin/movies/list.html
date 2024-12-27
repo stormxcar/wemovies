@@ -66,12 +66,17 @@
                             </ul>
                         </td>
                         <td style="width: 140px;" th:text="${movie.country.name}"></td>
-                        <td style="display: block;width: 160px;word-wrap: anywhere" th:text="${movie.link}"></td>
+                        <td style="display: block;width: 160px;word-wrap: anywhere" >
+                            <a th:href="${movie.link}" target="_blank">Phát</a>
+<!--                            <iframe th:src="${movie.link}" width="200" height="200" frameborder="0" allowfullscreen="true" scrolling="no" ></iframe>-->
+                        </td>
                         <td style="gap: 10px;">
                             <!-- Nút Sửa -->
                             <a class="btn btn-warning" href="#"
                                th:onclick="'openEditModal(' + ${movie.movie_id} + ')' "
                                style="width: 120px; margin: 2px;">Sửa</a>
+                            <a class="btn btn-danger" href="#"
+                               style="width: 120px; margin: 2px;">Xóa</a>
                         </td>
                     </tr>
                     </tbody>
@@ -144,7 +149,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editMovieModalLabel">Edit Movie</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="editMovieForm">

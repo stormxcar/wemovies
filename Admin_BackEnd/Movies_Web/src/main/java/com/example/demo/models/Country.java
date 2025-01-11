@@ -26,6 +26,11 @@ public class Country {
     private Long country_id;
     private String name;
 
+//    public Country(String name){
+//        this.name = name;
+//    }
+
+
     public Long getCountry_id() {
         return country_id;
     }

@@ -8,12 +8,17 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.Category;
 import com.example.demo.models.MovieType;
+import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.repositories.MovieTypeRepository;
 import com.example.demo.services.MovieTypeSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*
  * @description
@@ -26,10 +31,23 @@ import org.springframework.web.bind.annotation.*;
 public class MovieTypeController {
     @Autowired
     private MovieTypeSevice movieTypeSevice;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping()
     public String listMovieType(Model model) {
-        model.addAttribute("types", movieTypeSevice.getAllMovieTypes());
+        List<MovieType> movieTypes = movieTypeSevice.getAllMovieTypes();
+        Map<Long, Integer> movieCounts = new HashMap<>();
+
+        for(MovieType movieType : movieTypes) {
+            int countMoviesByMovieTypeId = movieTypeSevice.countMoviesByMovieTypeId(movieType.getMovie_type_id());
+            movieCounts.put(movieType.getMovie_type_id(), countMoviesByMovieTypeId);
+        }
+
+        model.addAttribute("movieCounts", movieCounts);
+
+        model.addAttribute("countTypes", movieTypeSevice.countMovieTypes());
+        model.addAttribute("types", movieTypes);
         model.addAttribute("type", new MovieType());
         return "admin/types/list";
     }

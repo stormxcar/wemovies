@@ -1,34 +1,71 @@
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
 function HorizontalMovies({ title, movies }) {
     const navigate = useNavigate();
-    // Kiểm tra nếu movies không phải là mảng hoặc là undefined, trả về mảng trống
     const validMovies = Array.isArray(movies) ? movies : [];
 
     const handleClickToDetail = (movieID) => {
         navigate(`/movie/${movieID}`);
-    }
+    };
 
     return (
-        <div className="my-6">
-            <h2 className="text-2xl font-bold mb-4">{title}</h2>
-            <div className="flex overflow-x-scroll gap-4 border-2">
+        <div className="my-6 py-5 overflow-hidden">
+            <h2 className="text-2xl font-bold mb-4 text-white">{title}</h2>
+            <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={20}
+                slidesPerView={5}
+                navigation={{
+                    nextEl: '.custom-next',
+                    prevEl: '.custom-prev',
+                }}
+
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                className="relative"
+                pagination={{clickable: true}}
+                style={{width: '100%', maxWidth: '1400px', margin: '0 auto'}}
+                breakpoints={{
+                    1024: {slidesPerView: 5},
+                    768: {slidesPerView: 3},
+                    480: {slidesPerView: 2},
+                }}
+            >
                 {validMovies.length > 0 ? (
-                    validMovies.map((movie, index) => (
-                        <div key={index} className="min-w-[200px] bg-blue-400" onClick={() => handleClickToDetail(movie.movie_id)}>
-                            <img
-                                src={movie.thumb_url}
-                                alt={movie.title}
-                                className="rounded-lg w-full"
-                            />
-                            <h3 className="text-lg mt-2">{movie.title}</h3>
-                            <h3>{movie.release_year}</h3>
-                        </div>
+                    validMovies.map((movie) => (
+                        <SwiperSlide key={movie.movie_id} onClick={() => handleClickToDetail(movie.movie_id)}>
+                            <div className="rounded-lg w-45 h-80 cursor-pointer border-2 bg-gray-500">
+                                <div className="w-full h-[70%] group overflow-hidden">
+                                    <img
+                                        src={movie.thumb_url}
+                                        alt={movie.title}
+                                        className="rounded-lg w-full h-full object-cover transition-transform group-hover:scale-105"
+                                    />
+                                </div>
+                                <div className="">
+                                    <h3 className="text-lg mt-2">{movie.title}</h3>
+                                    <h3 className="font-bold">{movie.release_year}</h3>
+                                </div>
+                            </div>
+                        </SwiperSlide>
                     ))
                 ) : (
-                    <p>No movies available</p> // Nếu không có phim, hiển thị thông báo
+                    <p>No movies available</p>
                 )}
-            </div>
+                <button
+                    className="custom-prev absolute left-0] top-1/2 transform -translate-y-1/2 p-2 rounded-full z-10 text-blue-600 p-3 bg-gray-200 text-2xl">
+                    &lt;
+                </button>
+                <button
+                    className="custom-next absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-3 text-2xl rounded-full z-10 text-blue-600">
+                    &gt;
+                </button>
+            </Swiper>
         </div>
     );
 }

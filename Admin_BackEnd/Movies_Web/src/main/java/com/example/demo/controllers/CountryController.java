@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /*
  * @description
  * @author : Nguyen Truong An
@@ -28,7 +32,18 @@ public class CountryController {
 
     @GetMapping()
     public String listMovieType(Model model) {
-        model.addAttribute("countries", countryService.getAllCountries());
+        List<Country> countries = countryService.getAllCountries();
+        Map<Long, Integer> movieCounts = new HashMap<>();
+
+        for(Country country : countries) {
+            int countMoviesByCountryId = countryService.countMoviesByCountryId(country.getCountry_id());
+            movieCounts.put(country.getCountry_id(), countMoviesByCountryId);
+        }
+
+        model.addAttribute("movieCounts", movieCounts);
+
+        model.addAttribute("countCountries", countryService.countCountries());
+        model.addAttribute("countries", countries);
         model.addAttribute("country", new Country());
         return "admin/countries/list";
     }

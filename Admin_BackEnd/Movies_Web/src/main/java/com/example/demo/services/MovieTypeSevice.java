@@ -20,4 +20,7 @@ public interface MovieTypeSevice {
     MovieType getMovieTypeById(Long id);
     MovieType saveMovieType(MovieType movieType);
     void deleteMovieTypeById(Long id);
+
+    int countMoviesByMovieTypeId(Long movieTypeId);
+    int countMovieTypes();
 }

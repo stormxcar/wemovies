@@ -31,3 +31,62 @@ export const fetchCategories = async () => {
         throw error;
     }
 };
+
+export const fetchMoviesByCategory = async (categoryName) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/movies/category/${categoryName}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('Fetched data:', data);
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+    }
+};
+
+// get movie by hote
+export const fetchMovieByHot = async () => {
+    try{
+        const response = await fetch("http://localhost:8080/api/movies/hot");
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    }catch(error){
+        console.error('Error fetching data:', error);
+        return error;
+    }
+};
+
+// get movie by categoru id
+export const fetchMovieByCategoryId = async (categoryId) => {
+    try{
+        const response = await fetch(`http://localhost:8080/api/movies/category/id/${categoryId}`);
+        if(!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    }catch(error)
+    {
+        console.error('Error fetching data:', error);
+        return error;
+    }
+};
+
+// api.js
+export const fetchMoviesByCountryAndCategory = async (countryName, categoryName) => {
+    try{
+        const response = await fetch(`http://localhost:8080/api/movies/country/${encodeURIComponent(countryName)}/category/${encodeURIComponent(categoryName)}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    }catch(error){
+        console.error('Error fetching data:', error);
+        return error;
+    }
+};
+

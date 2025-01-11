@@ -12,21 +12,26 @@
     <div id="page-content-wrapper" class="col-md-10 ml-sm-auto col-lg-10 px-md-4">
         <div class="container-fluid">
             <div class="d-flex p-3 justify-content-between align-items-center">
-                <h1>Thể loại</h1>
+                <h4>Tổng số thể loại : <span th:text="${countTypes}"></span></h4>
                 <button class="btn btn-primary" data-toggle="modal" data-target="#addtypeModal">Thêm mới +</button>
+            </div>
+            <div>
+                <input type="text" class="form-control" id="search" placeholder="Tìm kiếm tên thể loại" onkeyup="searchMovieType()">
             </div>
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>#</th>
                     <th>Tên</th>
+                    <th>Số phim có được</th>
                     <th>Hành động</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="movieTypeTableBody">
                 <tr th:each="type, status : ${types}">
                     <td th:text="${status.index + 1}"></td>
                     <td th:text="${type.type_name}"></td>
+                    <td th:text="${movieCounts[type.movie_type_id]}"></td>
                     <td>
                         <button class="btn btn-warning edit-type" data-toggle="modal" data-target="#edittypeModal"
                                 th:data-id="${type.movie_type_id}" th:data-name="${type.type_name}">Sửa</button>
@@ -90,6 +95,26 @@
             $(this).find('#editName').val(button.data('name'));
         });
     });
+
+    function searchMovieType() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("movieTypeTableBody");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
 </body>
 </html>

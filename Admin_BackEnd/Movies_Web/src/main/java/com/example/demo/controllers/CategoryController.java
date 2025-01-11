@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /*
  * @description
  * @author : Nguyen Truong An
@@ -21,12 +26,24 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
     @GetMapping
     public String listCategories(Model model) {
-        model.addAttribute("categories", categoryService.getAllCategory());
+        List<Category> categories = categoryService.getAllCategory();
+        Map<Long, Integer> movieCounts = new HashMap<>();
+
+        for (Category category : categories) {
+            int countMoviesByCategoryId = categoryService.countMoviesByCategoryId(category.getCategory_id());
+            movieCounts.put(category.getCategory_id(), countMoviesByCategoryId);
+        }
+
+        model.addAttribute("movieCounts", movieCounts);
+        model.addAttribute("categories", categories);
+        model.addAttribute("countCategories", categoryService.countCategories());
         model.addAttribute("category", new Category()); // Đảm bảo thêm attribute này cho modal
         return "admin/categories/list";
     }
+
     @PostMapping("/add")
     public String addCategory(@ModelAttribute("category") Category category) {
         categoryService.saveCategory(category);
@@ -34,7 +51,7 @@ public class CategoryController {
     }
     @GetMapping("/edit/{id}")
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model) {
-        Category category = categoryService.getCategoryById(id);
+        Category category = categoryService.getCategoriesByIds(List.of(id)).get(0);
         if (category != null) {
             model.addAttribute("category", category);
             return "admin/categories/edit";

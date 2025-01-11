@@ -44,4 +44,14 @@ public class CountryServiceImpl implements CountryService {
         Country country = countryRepositories.findById(id).orElse(null);
         countryRepositories.delete(country);
     }
+
+    @Override
+    public int countMoviesByCountryId(long countryId) {
+        return countryRepositories.countMoviesByCountryId(countryId);
+    }
+
+    @Override
+    public int countCountries() {
+        return (int) countryRepositories.count();
+    }
 }

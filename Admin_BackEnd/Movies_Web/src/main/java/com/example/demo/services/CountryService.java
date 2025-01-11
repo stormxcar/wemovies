@@ -21,4 +21,8 @@ public interface CountryService {
     Country getCountryById(long id);
     Country saveCountry(Country country);
     void deleteCountry(long id);
+
+    int countMoviesByCountryId(long countryId);
+
+    int countCountries();
 }

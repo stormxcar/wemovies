@@ -34,7 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null); // Tìm kiếm Category theo ID
+        return categoryRepository.findById(id).orElse(null); // Trả về Category theo ID
+    }
+
+    @Override
+    public List<Category> getCategoriesByIds(List<Long> ids) {
+        return categoryRepository.findAllById(ids);
     }
 
     @Override
@@ -45,5 +50,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteMovieCategoryById(Long id) {
         categoryRepository.deleteById(id); // Xóa Category theo ID
+    }
+
+    @Override
+    public int countMoviesByCategoryId(Long categoryId) {
+        return categoryRepository.countMoviesByCategoryId(categoryId);
+    }
+
+    @Override
+    public int countCategories() {
+        return (int) categoryRepository.count();
     }
 }

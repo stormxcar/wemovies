@@ -44,4 +44,14 @@ public class MovieTypeSeviceImpl implements MovieTypeSevice {
             MovieType movieType = movieTypeRepository.findById(id).orElse(null);
             movieTypeRepository.delete(movieType);
     }
+
+    @Override
+    public int countMoviesByMovieTypeId(Long movieTypeId) {
+        return movieTypeRepository.countMoviesByMovieTypeId(movieTypeId);
+    }
+
+    @Override
+    public int countMovieTypes() {
+        return (int) movieTypeRepository.count();
+    }
 }

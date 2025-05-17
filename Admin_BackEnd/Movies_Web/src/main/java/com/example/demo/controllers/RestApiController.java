@@ -235,13 +235,15 @@ public class RestApiController {
         }
     }
 
-    @GetMapping("/movies/search/{keyword}")
-    public ResponseEntity<List<Movie>> searchMovie(@PathVariable String keyword) {
-        List<Movie> movies = movieService.searchMovie(keyword);
-        if (movies.isEmpty()) {
-            return ResponseEntity.noContent().build(); // trả về status 204 nếu không có phim
-        }
-        return ResponseEntity.ok(movies); // trả về danh sách phim
+    // path variable dùng de lay tham so tu url sau dau /
+    // request param dùng de lay tham so tu url sau dau ?
+    @GetMapping("/movies/search")
+    public ResponseEntity<List<Movie>> searchMovie(@RequestParam(required = false) String keyword) {
+        List<Movie> movies = (keyword == null || keyword.trim().isEmpty()) ?
+                movieService.getAllMovies() : movieService.searchMovie(keyword);
+
+//        return movies.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(movies);
+        return ResponseEntity.ok(movies);
     }
 
     // get movie by hot = true

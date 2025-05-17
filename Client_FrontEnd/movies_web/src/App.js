@@ -6,17 +6,14 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Search from './components/Search';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
 
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import EpisodeDetail from "./components/EpisodeDetail";
 
 
 function App() {
     return (
         <div className="flex items-center justify-center flex-col w-100%">
-
-
             <Router>
                 <Header />
                 <Navbar />
@@ -24,11 +21,9 @@ function App() {
                     <Route path="/" element={<ShowMovies />} />
                     <Route path="/category/:categoryName" element={<CategoryMovies/>} />
                     <Route path="/movie/:id" element={<DetailMovie />} /> {/* Chi tiết phim */}
+                    <Route path="/movie/:id/episode/:episodeIndex" element={<EpisodeDetail />} /> {/* Chi tiết tập phim */}
                     <Route path="/movies/:categoryName" element={<CategoryMovies />} />
                     <Route path="/search" element={<Search />} />
-                    {/*auth*/}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<SignUp />} />
                 </Routes>
             </Router>
             <Footer />

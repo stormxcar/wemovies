@@ -38,17 +38,17 @@ const CategoryMovies = () => {
 
 
     return (
-        <div className="w-full px-10 bg-green-400">
+        <div className="w-full px-10 bg-gray-800">
             {/* Breadcrumb */}
             <nav className="my-4">
-                <span onClick={() => navigate('/')} className="text-gray-600 cursor-pointer">Movies</span> {'>'}
+                <span onClick={() => navigate('/')} className="text-white cursor-pointer">Movies</span> <span className="text-white">{'>'}</span>
                 <span className="text-blue-500">{categoryName}</span>
             </nav>
 
             {/*<h2 className="text-2xl font-bold mb-4">{categoryName} Movies</h2>*/}
 
             <div>
-                <h2>Lọc phim:</h2>
+                <h2 className="text-white">Lọc phim:</h2>
                 <select onChange={(e) => setSelectedCountry(e.target.value)} value={selectedCountry}>
                     <option value="">Tất cả</option>
                     {countryFilter.map((country) => (
@@ -56,7 +56,7 @@ const CategoryMovies = () => {
                     ))}
                 </select>
                 {/*<span>Năm</span>*/}
-                <button className="p-3 bg-blue-400" onClick={() => setSelectedCountry(selectedCountry)}>Duyệt phim
+                <button className=" bg-blue-400" onClick={() => setSelectedCountry(selectedCountry)}>Duyệt phim
                 </button>
             </div>
 

@@ -90,3 +90,17 @@ export const fetchMoviesByCountryAndCategory = async (countryName, categoryName)
     }
 };
 
+
+// search movie by name
+export const fetchMoviesByName = async (name) => {
+    try{
+        const response = await fetch(`http://localhost:8080/api/movies/search/${name}`);
+        if(!response.ok){
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    }catch(error){
+        console.error('Error fetching data:', error);
+        return error;
+    }
+}

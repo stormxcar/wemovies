@@ -11,6 +11,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- CKEditor -->
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
     <meta charset="UTF-8">
     <title>Thêm</title>
 </head>
@@ -178,6 +180,8 @@
             totalEpisodesInput.disabled = false;
         }
     });
+
+    CKEDITOR.replace('description');
 </script>
 </body>
 </html>

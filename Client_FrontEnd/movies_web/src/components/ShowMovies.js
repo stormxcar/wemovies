@@ -49,12 +49,12 @@ const ShowMovies = () => {
     },[]);
 
     return (
-        <div className="px-10 bg-gray-800">
+        <div className="px-10 bg-gray-800 w-full">
             <div>
                 {/* Breadcrumb */}
 
                 <nav className="my-4">
-                    <Link to="/" className="text-white">Movies</Link> {'>'}
+                    <Link to="/" className="text-white">Movies</Link> <span className="text-white">{'>'}</span>
                     <span className="text-blue-500"> danh mục phổ biến</span>
                 </nav>
             </div>
